@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seonmul Flip Cards</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .cards-container {
+      text-align: center;
+      justify-content: center;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .flip-card {
+      background-color: transparent;
+      width: 150px;
+      height: 200px;
+      perspective: 1000px;
+      margin: 10px;
+    }
+
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.5s;
+      transform-style: preserve-3d;
+    }
+
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+    }
+
+    .flip-card-front {
+      background-color: #bbb;
+      color: black;
+    }
+
+    .flip-card-back {
+      background-color: #2980b9;
+      color: white;
+      transform: rotateY(180deg);
+    }
+
+    .flip-card img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .return-btn {
+      margin-top: 20px;
+    }
+
+    .button-container {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <center><h2>Spy Matching Cards</h2></center>
+
+  <div class="cards-container" id="cardsContainer"></div>
+
+  <FORM>
+    <INPUT TYPE="button" VALUE="ReturnToMainPage" onClick="history.back()">
+  </FORM>
+
+  <script>
+    const cardImages = ["bg1.png", "bg2.png", "bg3.png", "bg4.png", "bg5.png", "bg6.png", "bg7.png", "bg8.png", "bg9.png", "bg10.png"];
+    const backImages = ["docs/sorry.png", "docs/sorry1.png", "docs/sorry2.png", "docs/Food.png", "docs/Premium.png"];
+
+    let flippedCards = []; // Track flipped cards
+    let matchedPairs = 0; // Track matched pairs
+
+    // Shuffle function
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    // Generate cards dynamically
+    function generateCards() {
+      const container = document.getElementById("cardsContainer");
+      const doubledImages = shuffleArray([...cardImages, ...cardImages]); // Duplicate and shuffle images
+
+      doubledImages.forEach((image, index) => {
+        const card = document.createElement("div");
+        card.className = "flip-card";
+        card.innerHTML = `
+          <div class="flip-card-inner" data-index="${index}" data-image="${image}">
+            <div class="flip-card-front">
+              <img src="docs/card-back.png" alt="Card Back">
+            </div>
+            <div class="flip-card-back">
+              <img src="${image}" alt="Card Front">
+            </div>
+          </div>
+        `;
+        card.addEventListener("click", () => flipCard(card));
+        container.appendChild(card);
+      });
+    }
+
+    // Flip card logic
+    function flipCard(card) {
+      const inner = card.querySelector(".flip-card-inner");
+      const cardImage = inner.dataset.image;
+      const cardIndex = inner.dataset.index;
+
+      if (flippedCards.length < 2 && !inner.classList.contains("matched")) {
+        inner.style.transform = "rotateY(180deg)";
+        flippedCards.push({ index: cardIndex, image: cardImage, element: inner });
+
+        if (flippedCards.length === 2) {
+          checkForMatch();
+        }
+      }
+    }
+
+    // Check for match logic
+    function checkForMatch() {
+      const [card1, card2] = flippedCards;
+
+      if (card1.image === card2.image) {
+        card1.element.classList.add("matched");
+        card2.element.classList.add("matched");
+        matchedPairs++;
+        checkForWin();
+      } else {
+        setTimeout(() => {
+          card1.element.style.transform = "rotateY(0deg)";
+          card2.element.style.transform = "rotateY(0deg)";
+        }, 1000);
+      }
+
+      flippedCards = [];
+    }
+
+    // Check for win condition
+    function checkForWin() {
+      if (matchedPairs === cardImages.length) {
+        setTimeout(() => {
+          alert("Congratulations! You matched all pairs!");
+        }, 500);
+      }
+    }
+
+    // Initialize game
+    generateCards();
+  </script>
+</body>
+</html>
