@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spy Matching</title>
+  <title>Seonmul Flip Cards</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -66,13 +66,17 @@
   </style>
 </head>
 <body>
-  <center><h2>Spy Matching Cards</h2></center>
+  <center><h2>Seonmul Flip Cards</h2></center>
 
   <div class="cards-container" id="cardsContainer"></div>
 
+  <FORM>
+    <INPUT TYPE="button" VALUE="ReturnToMainPage" onClick="history.back()">
+  </FORM>
+
   <script>
-    const cardImages = ["docs/bg1.png", "docs/bg2.png", "docs/bg3.png", "docs/bg4.png", "docs/bg5.png", "docs/bg6.png", "docs/bg7.png", "docs/bg8.png"];
-    const backImages = ["docs/white.png", "docs/lollipop.png", "docs/candy.png", "docs/black.png"];
+    const cardImages = ["docs/s1.png", "docs/s2.png", "docs/s3.png", "docs/s4.png", "docs/s5.png"];
+    const backImages = ["docs/sorry.png", "docs/sorry1.png", "docs/sorry2.png", "docs/Food.png", "docs/Premium.png"];
 
     let flippedCards = []; // Track flipped cards
     let matchedPairs = 0; // Track matched pairs
@@ -94,7 +98,7 @@
       doubledImages.forEach((image, index) => {
         const card = document.createElement("div");
         card.className = "flip-card";
-        card.innerHTML = 
+        card.innerHTML = `
           <div class="flip-card-inner" data-index="${index}" data-image="${image}">
             <div class="flip-card-front">
               <img src="docs/card-back.png" alt="Card Back">
@@ -103,7 +107,7 @@
               <img src="${image}" alt="Card Front">
             </div>
           </div>
-        ;
+        `;
         card.addEventListener("click", () => flipCard(card));
         container.appendChild(card);
       });
