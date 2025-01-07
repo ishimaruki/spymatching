@@ -94,16 +94,16 @@
       doubledImages.forEach((image, index) => {
         const card = document.createElement("div");
         card.className = "flip-card";
-        card.innerHTML = `
-          <div class="flip-card-inner" data-index="index.cardImages" data-image="image.backImages">
+        card.innerHTML = 
+          <div class="flip-card-inner" data-index="${index}" data-image="${image}">
             <div class="flip-card-front">
               <img src="docs/card-back.png" alt="Card Back">
             </div>
             <div class="flip-card-back">
-              <img src="image.backImages" alt="Card Front">
+              <img src="${image}" alt="Card Front">
             </div>
           </div>
-        `;
+        ;
         card.addEventListener("click", () => flipCard(card));
         container.appendChild(card);
       });
